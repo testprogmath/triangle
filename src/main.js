@@ -11,3 +11,6 @@ app.use(plugin, defaultConfig({
     locale: 'ru',
 })).mount('#app');
 app.component('TriangleForm', TriangleForm);
+
+
+
