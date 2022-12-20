@@ -3,6 +3,9 @@ import { ref } from 'vue'
 let messages = ref(new Set());
 let bugs = ref (new Set());
 let counter = ref(0);
+let a;
+let b;
+let c;
 function submitHandler(data, node) {
   if (!(data.a || data.b || data.c)) {
     node.setErrors(
@@ -32,9 +35,9 @@ function submitHandler(data, node) {
     )
     bugs.value.add('Проблемы с дробными числами');
   } else {
-   const a = parseInt(data.a);
-   const b = parseInt(data.b);
-   const c = parseInt(data.c);
+    a = parseInt(data.a);
+    b = parseInt(data.b);
+    c = parseInt(data.c);
     if (a===b &&b ===c && a===0) {
       bugs.value.add('Все нули как равносторонний треугольник');
     }
@@ -126,7 +129,8 @@ function  ifTriangleExists (a, b, c) {
   </FormKit>
 
 <p v-if="messages">{{messages[0]}}</p>
-<p>Вы проверили {{counter}} кейсов из 12</p>
+  <p v-if="a&&b&&c">Вы ввели А: {{a}}, В: {{b}}, С: {{c}}</p>
+<p>Вы проверили {{counter}} кейсов из 8</p>
   <h2 v-if="counter!==0">Список проверенных кейсов: </h2>
   <ul>
     <li v-for="item in messages" :key="item">
