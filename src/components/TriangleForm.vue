@@ -6,6 +6,8 @@ let counter = ref(0);
 let a;
 let b;
 let c;
+let displayType;
+const MAX_NUMBER=1000000;
 function submitHandler(data, node) {
   if (!(data.a || data.b || data.c)) {
     node.setErrors(
@@ -38,33 +40,48 @@ function submitHandler(data, node) {
     a = parseInt(data.a);
     b = parseInt(data.b);
     c = parseInt(data.c);
+
+    if (a > MAX_NUMBER || b > MAX_NUMBER || c > MAX_NUMBER) {
+      if (!messages.value.has('Большие числа')) counter.value++;
+      messages.value.add('Большие числа');
+      displayType = "Введенные числа слишком велики. Введите значения сторон меньше, чем " + MAX_NUMBER;
+    }
     if (a===b &&b ===c && a===0) {
+      if (!messages.value.has('Все стороны - нули')) counter.value++;
+      messages.value.add('Все стороны - нули');
       bugs.value.add('Все нули как равносторонний треугольник');
+      displayType = "Это равносторонний треугольник"
     }
     else if (!ifTriangleExists(a,b,c)) {
       if (!messages.value.has('Треугольник не существует')) counter.value++;
       messages.value.add('Треугольник не существует');
+      displayType = "Этот треугольник не существует"
     }
    else if (a === b && b === c) {
      if (!messages.value.has('Равносторонний треугольник')) counter.value++;
      messages.value.add('Равносторонний треугольник');
+      displayType = "Это равносторонний треугольник"
    }
    else if (a === b && b!==c || a===c && a!==b || b===c && a!==b) {
      if (!messages.value.has('Равнобедренный треугольник')) counter.value++;
      messages.value.add('Равнобедренный треугольник');
+      displayType = "Это равнобедренный треугольник"
    }
    else if (isRightTriangle(a, b, c)) {
      if (!messages.value.has('Прямоугольный треугольник')) counter.value++;
      messages.value.add('Прямоугольный треугольник');
+      displayType = "Это прямоугольный треугольник"
    }
    else if (isObtuseTriangle(a,b,c)) {
      if (!messages.value.has('Тупоугольный треугольник')) counter.value++;
      messages.value.add('Тупоугольный треугольник');
+      displayType = "Это тупоугольный треугольник"
    }
    else if (isAcuteTriangle(a,b,c)) {
      if (!messages.value.has('Остроугольный треугольник')) counter.value++;
      messages.value.add('Остроугольный треугольник');
-   }
+      displayType = "Это остроугольный треугольник"
+    }
 
    console.log(messages);
   }
@@ -102,6 +119,7 @@ function  ifTriangleExists (a, b, c) {
       submit-label="Проверить"
       @submit="submitHandler"
       validation-visibility="blur"
+      outer-class="myclass"
   >
     <h2>Тестирование треугольника на существование (неравенство треугольника)</h2>
     <p>Введите данные о сторонах треугольника ниже</p>
@@ -109,14 +127,14 @@ function  ifTriangleExists (a, b, c) {
         type="text"
         name="a"
         label="Сторона A"
-        validation="number|between:0,1000000"
+        validation="number|min:0"
         placeholder="Сторона А"
     />
     <FormKit
         type="text"
         name="b"
         label="Сторона В"
-        validation="number|between:0,1000000"
+        validation="number|min:0"
         placeholder="Сторона B"
     />
     <FormKit
@@ -129,9 +147,12 @@ function  ifTriangleExists (a, b, c) {
   </FormKit>
 
 <p v-if="messages">{{messages[0]}}</p>
-  <p v-if="a&&b&&c">Вы ввели А: {{a}}, В: {{b}}, С: {{c}}</p>
-<p>Вы проверили {{counter}} кейсов из 8</p>
-  <h2 v-if="counter!==0">Список проверенных кейсов: </h2>
+  <p v-if="a && b && c">Вы ввели: <br>
+    А: {{a}}; В: {{b}}; С: {{c}}</p>
+  <h2 style="color: darkblue">{{displayType}}</h2>
+
+<p>Вы проверили {{counter}} кейсов из 10</p>
+  <h3 v-if="counter!==0">Список проверенных кейсов: </h3>
   <ul>
     <li v-for="item in messages" :key="item">
     {{ item }}
