@@ -36,7 +36,16 @@ function submitHandler(data, node) {
         ['Проверьте, что все поля заполнены'],
     )
     bugs.value.add('Проблемы с дробными числами');
-  } else {
+  }
+ else if (data.a > MAX_NUMBER || data.b > MAX_NUMBER || data.b > MAX_NUMBER ) {
+    node.setErrors(
+        // Arg 1 is form-wide errors
+        ['Введенные числа слишком большие, введите числа не превышающие 1000'],
+    )
+    if (!messages.value.has('Большие числа')) counter.value++;
+    messages.value.add('Большие числа');
+  }
+ else {
     a = parseInt(data.a);
     b = parseInt(data.b);
     c = parseInt(data.c);
